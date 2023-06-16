@@ -394,6 +394,38 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
         integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ"
         crossorigin="anonymous"></script>
+    <!-- bmi js -->
+    <script>
+        function calculateBMI() {
+            var height = parseFloat(document.getElementById("height").value) / 100;
+            var weight = parseFloat(document.getElementById("weight").value);
+            var age = parseInt(document.getElementById("age").value);
+            var gender = document.getElementById("gender").value;
+            var name = document.getElementById("name").value;
+            var bmi = weight / (height * height);
+
+            const token = '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';
+
+            fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token,
+                },
+                body: JSON.stringify({
+                    "model": "gpt-3.5-turbo",
+                    "messages": [{ "role": "user", "content": "Tôi tên là " + name + ", năm nay " + age + " tuổi, giới tính " + gender + ", chỉ số BMI của tôi là " + bmi.toFixed(2) + ", hãy cho tôi những lời khuyên về dinh dưỡng và tập luyện một cách ngắn gọn" }]
+                })
+            })
+                .then(response => {
+                    return response.json();
+                }).then(data => {
+                    var message = data.choices[0].message.content;
+                    var result = "Tên: " + name + "\n" + "Tuổi: " + age + "\n" + "Giới tính: " + gender + "\n" + "Chỉ số BMI: " + bmi.toFixed(2) + "\n" + "Lời khuyên: " + message;
+                    alert(result);
+                });
+        }
+    </script>
 </body>
 
 </html>
